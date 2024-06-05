@@ -1,0 +1,39 @@
+name: browser tests
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout own repository
+        uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter doctor -v
+
+      - name: Check formatting
+        run: dart format --line-length 80 --set-exit-if-changed lib integration_test
+
+      - name: Analyze code
+        run: flutter analyze lib integration_test
+
+      - name: Setup SurrealDB
+        run: curl -sSf https://install.surrealdb.com | sh
+
+      - name: Setup chrome driver
+        uses: nanasess/setup-chromedriver@v2
+
+      - name: Run chrome driver
+        run: |
+          chromedriver --port=4444 &
+
+      - name: Run browser tests
+        run: ./ci-integration-test.sh
