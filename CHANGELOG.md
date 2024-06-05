@@ -1,0 +1,16 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+Each new version will be released following the new version of the [surrealdb.js](https://github.com/surrealdb/surrealdb.js).
+
+Changes to the project are tracked using build numbers behind the version number, denoted as increments such as +1, +2, and so on.
+
+## [Unreleased]
+
+## [1.0.0-beta.8+1] - 2024-06-06
+
+- Initial release 🎉

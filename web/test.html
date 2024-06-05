@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SurrealDB.js Example</title>
+</head>
+
+<body>
+    <h1>SurrealDB.js Example</h1>
+    <p>This is a static HTML page to demo the basic usage of SurrealDB.js.</p>
+
+    <script type="module">
+        import { Surreal, RecordId, Table, StringRecordId } from "./assets/js/index.js";
+
+        async function testSurrealDB() {
+            const db = new Surreal();
+
+            try {
+                await db.connect("http://127.0.0.1:8000/rpc");
+
+                await db.use({
+                    namespace: "test",
+                    database: "test"
+                });
+
+                await db.signin({
+                    username: "root",
+                    password: "root",
+                });
+
+                // Create a new person with a random id
+                let created = await db.create("person", {
+                    title: "Founder & CEO",
+                    name: {
+                        first: "Tobie",
+                        last: "Morgan Hitchcock",
+                    },
+                    marketing: true,
+                });
+
+                console.log('created', created);
+
+                // Update a person record with a specific id
+                let updated = await db.merge(new StringRecordId('person:jaime'), {
+                    marketing: true,
+                });
+                console.log('updated', updated);
+
+
+                // Select all people records
+                let people = await db.select("person");
+                console.log('people', people);
+
+                // Perform a custom advanced query
+                let groups = await db.query(
+                    "SELECT marketing, count() FROM $tb GROUP BY marketing",
+                    {
+                        tb: new Table("person"),
+                    },
+                );
+                console.log('groups', groups);
+            } catch (e) {
+                console.error('Error connecting to SurrealDB:', e);
+            }
+        }
+
+        testSurrealDB();
+    </script>
+</body>
+
+</html>
