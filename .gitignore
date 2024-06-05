@@ -41,3 +41,6 @@ app.*.map.json
 
 # Test related
 coverage
+
+# surrealdb.js repo
+surrealdb.js/
