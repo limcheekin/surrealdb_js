@@ -29,6 +29,16 @@ Install it:
 flutter pub get
 ```
 
+Lastly, add the following code before the `</head>` tag in the `web/index.html` file:
+```html
+  <script type="module">
+    import { Surreal, StringRecordId } from "/assets/packages/surrealdb_js/assets/js/index.js";
+    // expose the type to the global scope
+    globalThis.SurrealJS = Surreal;
+    globalThis.StringRecordId = StringRecordId;
+  </script>
+```
+
 ## ✨ Features
 
 - <input type="checkbox" checked disabled /> [x] `connect()`
