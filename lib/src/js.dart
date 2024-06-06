@@ -4,8 +4,8 @@ import 'dart:js_interop';
 /// Flutter SurrealDB SDK for JavaScript
 // REF: https://dart.dev/interop/js-interop/usage#interop-type-members
 
-extension type SurrealWrapper._(JSObject _) implements JSObject {
-  external SurrealWrapper();
+extension type SurrealJS._(JSObject _) implements JSObject {
+  external SurrealJS();
   external JSPromise connect(String endpoint, [JSAny? opts]);
   external JSPromise use(JSAny? value);
   external JSPromise let(String key, JSAny? value);

@@ -13,7 +13,7 @@ import 'package:surrealdb_js/src/js.dart';
 /// to the Surreal server, and then you can perform operations like [use],
 /// [create], [update], [merge], [select], [query], [delete], etc.
 class Surreal {
-  final _surreal = SurrealWrapper();
+  final _surreal = SurrealJS();
   final _logger = Logger(
     printer: PrettyPrinter(),
   );
