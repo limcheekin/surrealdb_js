@@ -1,0 +1,42 @@
+name: publish
+on:
+  push:
+    tags: # trigger the publish job on tag creation
+      - "*"
+jobs:
+  test:
+    uses: ./.github/workflows/browser-tests.yaml
+
+  publish_github_release:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ncipollo/release-action@v1
+        with:
+          bodyFile: "RELEASE.md"
+
+  publish_pub_dev:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter doctor -v
+
+      - name: Update GITHUB_RUN_NUMBER to version
+        run: ./update_version.sh
+
+      - name: Prepare pub credentials
+        run: mkdir -p $XDG_CONFIG_HOME/dart && echo '${{ secrets.CREDENTIAL_JSON }}' > "$XDG_CONFIG_HOME/dart/pub-credentials.json"
+
+      - name: Publish package
+        run: |
+          flutter pub publish --dry-run
+          # flutter pub publish --force
