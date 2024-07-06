@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -65,6 +66,45 @@ DEFINE FIELD created ON document TYPE datetime;
     );
     expect(mergedDoc['created'], equals(DateTime.parse(mergedDate)));
   });
+
+  /* testWidgets('Create a record with bytes type field and change it',
+      (WidgetTester tester) async {
+    const sql = '''
+DEFINE TABLE documents SCHEMALESS;
+DEFINE FIELD file ON documents TYPE bytes;
+''';
+    await db.query(sql);
+    const text = 'Hello World!';
+    final file = Uint8List.fromList(utf8.encode(text));
+    final data = {
+      'file': file,
+    };
+    var result =
+        await db.query('CREATE ONLY documents CONTENT ${jsonEncode(data)}');
+    final doc = Map<String, dynamic>.from(
+      result! as Map,
+    );
+
+    expect(doc['id'], isNotNull);
+    expect(doc['file'], equals(file));
+
+    result = await db.select(doc['id'].toString());
+    final selectedDoc = Map<String, dynamic>.from(result! as Map);
+    expect(selectedDoc['file'], equals(file));
+
+    const mergeText = 'Hello Magic World!';
+    final mergeFile = Uint8List.fromList(utf8.encode(mergeText));
+    final mergeData = {
+      'file': mergeText,
+    };
+    final merged = await db.query(
+      'UPDATE ONLY ${doc['id']} MERGE ${jsonEncode(mergeData)}',
+    );
+    final mergedDoc = Map<String, dynamic>.from(
+      merged! as Map,
+    );
+    expect(mergedDoc['file'], equals(mergeFile));
+  }); */
 
   testWidgets('Update a record and verify the update',
       (WidgetTester tester) async {
