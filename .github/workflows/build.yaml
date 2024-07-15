@@ -10,22 +10,23 @@ jobs:
       - name: Checkout own repo
         uses: actions/checkout@v4
 
-      - name: "Checkout surrealdb.js repo (latest tag)"
+      - name: Checkout surrealdb.js repo (latest tag)
         run: |
           git clone https://github.com/surrealdb/surrealdb.js.git
           cd surrealdb.js;export LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
           git checkout $LATEST_TAG
 
-      - name: "Install Deno"
-        uses: denoland/setup-deno@v1
-        with:
-          deno-version: v1.x
+      - name: Install Bun
+        run: curl -fsSL https://bun.sh/install | bash
 
-      - name: "Build"
-        run: cd surrealdb.js;deno task build
+      - name: Build
+        run: |
+          cd surrealdb.js
+          bun install
+          bun run build
 
       - name: "Copy build files to the assets/js directory"
-        run: cp -u surrealdb.js/npm/web/* assets/js/
+        run: cp -u surrealdb.js/dist/index.bundled.mjs assets/js/
 
       - name: "Git commit surrealdb_js assets"
         run: |

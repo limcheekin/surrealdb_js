@@ -104,7 +104,7 @@ DEFINE FIELD file ON documents TYPE bytes;
 ''';
     await db.query(sql);
     const text = 'Hello World!';
-    final file = utf8.encode(text).buffer;
+    final file = utf8.encode(text);
     final data = {
       'file': file,
     };
@@ -117,16 +117,18 @@ DEFINE FIELD file ON documents TYPE bytes;
     );
 
     expect(doc['id'], isNotNull);
-    expect(doc['file'], equals(file.asUint8List()));
+    var resultFile = (doc['file'] as ByteBuffer).asUint8List();
+    expect(resultFile, equals(file));
 
     result = await db.select(doc['id'].toString());
     final selectedDoc = Map<String, dynamic>.from(result! as Map);
-    expect(selectedDoc['file'], equals(file.asUint8List()));
+    resultFile = (selectedDoc['file'] as ByteBuffer).asUint8List();
+    expect(resultFile, equals(file));
     // ignore: avoid_dynamic_calls
-    expect(selectedDoc['file'].runtimeType, equals(Uint8List));
+    expect(selectedDoc['file'].runtimeType, equals(ByteBuffer));
 
     const mergeText = 'Hello Magic World!';
-    final mergeFile = utf8.encode(mergeText).buffer;
+    final mergeFile = utf8.encode(mergeText);
     final mergeData = {
       'file': mergeFile,
     };
@@ -137,8 +139,9 @@ DEFINE FIELD file ON documents TYPE bytes;
     final mergedDoc = Map<String, dynamic>.from(
       merged! as Map,
     );
-    expect(mergedDoc['file'], equals(mergeFile.asUint8List()));
-    expect(utf8.decode(mergedDoc['file'] as Uint8List), equals(mergeText));
+    resultFile = (mergedDoc['file'] as ByteBuffer).asUint8List();
+    expect(resultFile, equals(mergeFile));
+    expect(utf8.decode(resultFile), equals(mergeText));
   });
 
   testWidgets('Update a record and verify the update',
