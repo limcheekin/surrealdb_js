@@ -17,9 +17,9 @@ jobs:
           git checkout $LATEST_TAG
 
       - name: Install Bun
-        run: |
-          curl -fsSL https://bun.sh/install | bash
-          source /home/runner/.bashrc
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       - name: Build
         run: |
