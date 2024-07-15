@@ -19,6 +19,7 @@ SIGNUP (
 SIGNIN (
   SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(password, $password)
 );
+DEFINE TABLE user PERMISSIONS FOR select WHERE id = $auth;
 ''';
 
   //Tests run with local SurrealDB instance started with the command below:
@@ -63,6 +64,25 @@ SIGNIN (
     final result = await db.signin(credentials);
     logger.i('signin result $result');
     expect(result, isNotNull);
+  });
+
+  testWidgets('info test', (WidgetTester tester) async {
+    final surreal = Surreal();
+    await surreal.connect('http://127.0.0.1:8000/rpc');
+    await surreal.use(namespace: 'surreal', database: 'surreal');
+    final credentials = {
+      'namespace': 'surreal',
+      'database': 'surreal',
+      'scope': 'user_scope',
+      'email': 'info@example.com',
+      'password': 'password456',
+    };
+    await surreal.signup(credentials);
+    await surreal.signin(credentials);
+    final info = await surreal.info();
+    logger.i('info $info');
+    await surreal.close();
+    expect(info, isNotNull);
   });
 
   testWidgets('authenticate and invalidate test', (WidgetTester tester) async {

@@ -7,6 +7,7 @@ import 'dart:js_interop';
 extension type SurrealJS._(JSObject _) implements JSObject {
   external SurrealJS();
   external JSPromise connect(String endpoint, [JSAny? opts]);
+  external JSPromise close();
   external JSPromise use(JSAny? value);
   external JSPromise let(String key, JSAny? value);
   external JSPromise unset(String key);
@@ -14,6 +15,7 @@ extension type SurrealJS._(JSObject _) implements JSObject {
   external JSPromise<JSAny?> signin(JSAny? credentials);
   external JSPromise invalidate();
   external JSPromise authenticate(String token);
+  external JSPromise<JSAny?> info();
   external JSPromise<JSAny?> query(String sql, [JSAny? bindings]);
   external JSPromise<JSAny?> select(JSAny resource);
   external JSPromise<JSAny?> create(JSAny resource, JSAny? data);

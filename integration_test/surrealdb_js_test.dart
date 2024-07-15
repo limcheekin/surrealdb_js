@@ -19,7 +19,9 @@ void main() {
   });
 
   tearDown(() async {
-    await db.delete('person'); // delete all
+    try {
+      await db.delete('person'); // delete all
+    } catch (_) {}
   });
 
   testWidgets('Create a record and verify its creation',
@@ -239,5 +241,18 @@ DEFINE FIELD file ON documents TYPE bytes;
   testWidgets('version test', (WidgetTester tester) async {
     final result = await db.version();
     expect(result, isNotNull);
+  });
+
+  testWidgets('should throw ConnectionUnavailable after close()',
+      (WidgetTester tester) async {
+    final result = await db.version();
+    expect(result, isNotNull);
+    await db.close();
+    expect(
+      () async => db.version(),
+      throwsA(
+        predicate((e) => e.toString().contains('ConnectionUnavailable')),
+      ),
+    );
   });
 }

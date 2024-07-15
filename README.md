@@ -42,6 +42,7 @@ Lastly, add the following code before the `</head>` tag in the `web/index.html` 
 ## ✨ Features
 
 - <input type="checkbox" checked disabled /> [x] `connect()`
+- <input type="checkbox" checked disabled /> [x] `close()`
 - <input type="checkbox" checked disabled /> [x] `use()`
 - <input type="checkbox" checked disabled /> [x] `create()`
 - <input type="checkbox" checked disabled /> [x] `update()`
@@ -54,8 +55,9 @@ Lastly, add the following code before the `</head>` tag in the `web/index.html` 
 - <input type="checkbox" checked disabled /> [x] `unset()`
 - <input type="checkbox" checked disabled /> [x] `signup()`
 - <input type="checkbox" checked disabled /> [x] `signin()`
-- <input type="checkbox" disabled /> [x] `invalidate()`
-- <input type="checkbox" disabled /> [x] `authenticate()`
+- <input type="checkbox" checked disabled /> [x] `invalidate()`
+- <input type="checkbox" checked disabled /> [x] `authenticate()`
+- <input type="checkbox" checked disabled /> [x] `info()`
 - <input type="checkbox" checked disabled /> [x] `patch()`
 - <input type="checkbox" checked disabled /> [x] `version()`
 

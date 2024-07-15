@@ -58,6 +58,11 @@ class Surreal {
     return _surreal.authenticate(token).toDart;
   }
 
+  /// Returns the record of an authenticated scope user.
+  Future<Object?> info() async {
+    return _wrap(_surreal.info());
+  }
+
   /// Applies JSON Patch changes to a resource.
   ///
   /// The [resource] is the name of the resource to patch,
@@ -171,6 +176,11 @@ class Surreal {
     Map<String, dynamic> options = const {},
   }) {
     return _surreal.connect(endpoint, options.jsify()).toDart;
+  }
+
+  /// Closes the persistent connection to the database.
+  Future<void> close() {
+    return _surreal.close().toDart;
   }
 
   /// Switch to a specific namespace or database.
