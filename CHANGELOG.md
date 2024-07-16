@@ -11,6 +11,12 @@ Changes to the project are tracked using build numbers behind the version number
 
 ## [Unreleased]
 
+## [1.0.0-beta.14+2] - 2024-06-06
+
+- Upgraded surrealdb.js to 1.0.0-beta.14.
+- Added `info` and `close` method.
+- Added `engines` argument to `Surreal` constructor for the `surrealdb_wasm` integration.
+
 ## [1.0.0-beta.8+1] - 2024-06-06
 
 - Initial release 🎉

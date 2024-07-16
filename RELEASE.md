@@ -1,1 +1,3 @@
-- Initial release 🎉
+- Upgraded surrealdb.js to 1.0.0-beta.14.
+- Added `info` and `close` method.
+- Added `engines` argument to `Surreal` constructor for the `surrealdb_wasm` integration.
