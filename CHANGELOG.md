@@ -11,7 +11,7 @@ Changes to the project are tracked using build numbers behind the version number
 
 ## [Unreleased]
 
-## [1.0.0-beta.14+2] - 2024-06-06
+## [1.0.0-beta.14+3] - 2024-07-16
 
 - Upgraded surrealdb.js to 1.0.0-beta.14.
 - Added `info` and `close` method.
