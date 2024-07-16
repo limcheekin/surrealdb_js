@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 import 'package:surrealdb_js/src/js.dart';
 
-/// The Surreal class is for interacting with the SurrealDB WebAssembly library.
+/// The Surreal class is for interacting with the SurrealDB JavaScript library.
 ///
 /// To use SurrealDB, you should first call [connect] to establish a connection
 /// to the Surreal server, and then you can perform operations like [use],
