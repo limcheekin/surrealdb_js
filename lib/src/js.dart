@@ -5,7 +5,7 @@ import 'dart:js_interop';
 // REF: https://dart.dev/interop/js-interop/usage#interop-type-members
 
 extension type SurrealJS._(JSObject _) implements JSObject {
-  external SurrealJS();
+  external SurrealJS([JSAny? engines]);
   external JSPromise connect(String endpoint, [JSAny? opts]);
   external JSPromise close();
   external JSPromise use(JSAny? value);

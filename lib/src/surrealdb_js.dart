@@ -13,10 +13,25 @@ import 'package:surrealdb_js/src/js.dart';
 /// to the Surreal server, and then you can perform operations like [use],
 /// [create], [update], [merge], [select], [query], [delete], etc.
 class Surreal {
-  final _surreal = SurrealJS();
+  /// The [engines] is for the optional WasmEngine.
+  Surreal([Object? engines]) {
+    _surreal = engines == null ? SurrealJS() : SurrealJS(engines.jsify());
+  }
+
+  late SurrealJS _surreal;
   final _logger = Logger(
     printer: PrettyPrinter(),
   );
+
+  /// Connects to the SurrealDB server.
+  ///
+  /// The [url] is the URL of the SurrealDB server, and [namespace] is the
+  /// namespace to use. If [namespace] is not specified, the default namespace
+  /// will be used.
+  ///
+  /// The [database] is the database to use. If [database] is not specified, the
+  /// default database will be used.
+  ///
 
   /// Assigns a value as a parameter for this connection.
   ///
