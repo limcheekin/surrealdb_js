@@ -23,16 +23,6 @@ class Surreal {
     printer: PrettyPrinter(),
   );
 
-  /// Connects to the SurrealDB server.
-  ///
-  /// The [url] is the URL of the SurrealDB server, and [namespace] is the
-  /// namespace to use. If [namespace] is not specified, the default namespace
-  /// will be used.
-  ///
-  /// The [database] is the database to use. If [database] is not specified, the
-  /// default database will be used.
-  ///
-
   /// Assigns a value as a parameter for this connection.
   ///
   /// The [key] is the parameter name, and [value] is the value to be assigned.
