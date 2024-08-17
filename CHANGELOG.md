@@ -11,6 +11,10 @@ Changes to the project are tracked using build numbers behind the version number
 
 ## [Unreleased]
 
+## [1.0.0-beta.20+4] - 2024-08-17
+
+- Upgraded surrealdb.js to 1.0.0-beta.20.
+
 ## [1.0.0-beta.14+3] - 2024-07-16
 
 - Upgraded surrealdb.js to 1.0.0-beta.14.
