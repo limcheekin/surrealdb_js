@@ -3,6 +3,9 @@ on:
   workflow_dispatch:
   workflow_call:
 
+permissions:
+  contents: write  
+
 jobs:
   build:
     runs-on: ubuntu-latest
