@@ -6,6 +6,8 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 import 'package:surrealdb_js/src/js.dart';
+import 'package:surrealdb_js/src/js_date.dart';
+import 'package:surrealdb_js/src/js_date_json_converter.dart';
 
 /// The Surreal class is for interacting with the SurrealDB JavaScript library.
 ///
@@ -486,6 +488,7 @@ Please see https://github.com/surrealdb/surrealdb.wasm/issues/56.''');
   Future<Object?> transaction(
     Future<void> Function(Transaction txn) action, {
     Duration timeout = const Duration(seconds: 5),
+    bool showSql = false,
   }) async {
     // Create a new transaction object
     final txn = Transaction(this);
@@ -494,7 +497,7 @@ Please see https://github.com/surrealdb/surrealdb.wasm/issues/56.''');
     await action(txn).timeout(timeout);
 
     // Execute the transaction
-    return txn._execute();
+    return txn._execute(showSql);
   }
 }
 
@@ -504,6 +507,9 @@ class Transaction {
   Transaction(this._db) {
     id = _generateId();
   }
+  final _logger = Logger(
+    printer: PrettyPrinter(),
+  );
 
   /// The statement to begin a database transaction.
   static const _beginTransaction = 'BEGIN TRANSACTION;';
@@ -524,6 +530,9 @@ class Transaction {
 
   /// The Surreal instance associated with this transaction.
   final Surreal _db;
+
+  /// A JSDate to DateTime json converter.
+  final _jsDateJsonConverter = const JSDateJsonConverter();
 
   /// The unique identifier for this transaction.
   late String id;
@@ -552,10 +561,14 @@ class Transaction {
   ///
   /// If the transaction is canceled,
   /// a message indicating cancellation is returned.
-  Future<Object?> _execute() async {
+  Future<Object?> _execute(bool showSql) async {
     if (!isCancel) {
       buffer.write(_commitTransaction);
-      return _db.query(buffer.toString());
+      final sql = buffer.toString();
+      if (showSql) {
+        _logger.i(sql);
+      }
+      return _db.query(sql);
     } else {
       return 'Transaction has been canceled by user.';
     }
@@ -586,11 +599,18 @@ class Transaction {
       final params = <String, String>{};
       for (final match in matches) {
         final key = match.group(1)!;
-        params[key] = bindings[key] is Map || bindings[key] is Iterable
-            ? jsonEncode(bindings[key])
-            : bindings[key] is String
-                ? '"${bindings[key]}"'
-                : bindings[key].toString();
+        if (bindings[key] is Map ||
+            bindings[key] is Iterable ||
+            bindings[key] is JSDate) {
+          params[key] =
+              jsonEncode(_convertJSDatetoSurrealDateTime(bindings[key]));
+        } else if (bindings[key] is String) {
+          params[key] = '"${bindings[key]}"';
+          //} else if (bindings[key] is JSDate) {
+          //  params[key] = _convertJSDatetoSurrealDateTime(bindings[key]);
+        } else {
+          params[key] = bindings[key].toString();
+        }
       }
       final parameterizedSql = sql.replaceAllMapped(
         regex,
@@ -599,6 +619,28 @@ class Transaction {
       buffer.write(parameterizedSql);
     } else {
       buffer.write(sql);
+    }
+  }
+
+  dynamic _convertJSDatetoSurrealDateTime(dynamic input) {
+    if (input is Map) {
+      final result = <String, dynamic>{};
+      input.forEach((key, value) {
+        result[key.toString()] = _convertJSDatetoSurrealDateTime(value);
+      });
+      return result;
+    } else if (input is List) {
+      final result = <dynamic>[];
+      for (final item in input) {
+        result.add(_convertJSDatetoSurrealDateTime(item));
+      }
+      return result;
+    } else if (input is JSDate) {
+      return {
+        'date': _jsDateJsonConverter.fromJson(input).toIso8601String(),
+      };
+    } else {
+      return input;
     }
   }
 }
