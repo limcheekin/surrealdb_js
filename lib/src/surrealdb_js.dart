@@ -20,6 +20,8 @@ class Surreal {
     _surreal = engines == null ? SurrealJS() : SurrealJS(engines.jsify());
   }
 
+  /// A tag to indicate date time field
+  static const dateTimeTag = '<datetime>';
   late SurrealJS _surreal;
   final _logger = Logger(
     printer: PrettyPrinter(),
@@ -599,11 +601,16 @@ class Transaction {
       final params = <String, String>{};
       for (final match in matches) {
         final key = match.group(1)!;
-        if (bindings[key] is Map ||
-            bindings[key] is Iterable ||
-            bindings[key] is JSDate) {
+        if (bindings[key] is Map || bindings[key] is Iterable) {
           params[key] =
-              jsonEncode(_convertJSDatetoSurrealDateTime(bindings[key]));
+              jsonEncode(_convertJSDatetoSurrealDateTime(bindings[key]))
+                  .replaceAllMapped(RegExp(r'"(<datetime>)\\"(.*?)\\"'),
+                      (match) {
+            return '${match[1]}"${match[2]}';
+          });
+        } else if (bindings[key] is JSDate) {
+          params[key] =
+              _convertJSDatetoSurrealDateTime(bindings[key]) as String;
         } else if (bindings[key] is String) {
           params[key] = '"${bindings[key]}"';
           //} else if (bindings[key] is JSDate) {
@@ -636,9 +643,9 @@ class Transaction {
       }
       return result;
     } else if (input is JSDate) {
-      return {
-        'date': _jsDateJsonConverter.fromJson(input).toIso8601String(),
-      };
+      final dateString =
+          _jsDateJsonConverter.fromJson(input).toUtc().toIso8601String();
+      return '${Surreal.dateTimeTag}"$dateString"';
     } else {
       return input;
     }

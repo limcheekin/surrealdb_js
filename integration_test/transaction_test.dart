@@ -1,9 +1,12 @@
 // ignore_for_file: cascade_invocations
 
 import 'dart:async';
+import 'dart:js_interop';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:surrealdb_js/src/js_date.dart';
+import 'package:surrealdb_js/src/surrealdb_js.dart';
 import 'package:surrealdb_js/surrealdb_js.dart';
 
 void main() {
@@ -36,6 +39,48 @@ void main() {
       );
       expect(test['name'], equals('John'));
       await db.delete('test'); // clean up
+    });
+
+    testWidgets('Transaction executes query with date field',
+        (WidgetTester tester) async {
+      final dateTime = DateTime.now().toUtc();
+      final dateTimeString = dateTime.toIso8601String();
+      final content = {
+        'name': 'John',
+        'age': 25,
+        'birthDate': JSDate(dateTimeString.toJS),
+      };
+
+      await db.transaction((txn) async {
+        txn.query(
+          r'''
+INSERT INTO table1 (name, age, birthDate) 
+VALUES ($name, $age, $birthDate);''',
+          bindings: content,
+        );
+        txn.query(
+          r'INSERT INTO table2 $content;',
+          bindings: {'content': content},
+        );
+      });
+
+      var result = await db.query('SELECT * FROM table1;');
+      expect(result, isNotEmpty);
+      var test = Map<String, dynamic>.from(
+        (result! as List).first as Map,
+      );
+      expect(test['birthDate'], equals(dateTime));
+
+      result = await db.query('SELECT * FROM table2;');
+      expect(result, isNotEmpty);
+      test = Map<String, dynamic>.from(
+        (result! as List).first as Map,
+      );
+      expect(test['birthDate'], equals(dateTime));
+
+      // clean up
+      await db.delete('table1');
+      await db.delete('table2');
     });
 
     testWidgets('Transaction cancellation prevents execution',
@@ -167,10 +212,35 @@ void main() {
       );
       expect(txn.buffer.toString(), contains('"John", 25'));
 
-      txn.query(r'INSERT INTO table (name, age) VALUES ($name, $age)');
+      final dateTime = DateTime.now().toUtc().toIso8601String();
+      final content = {
+        'name': 'John',
+        'age': 25,
+        'birthDate': JSDate(dateTime.toJS),
+      };
+
+      txn.buffer.clear();
+      txn.query(
+        r'''
+INSERT INTO table (name, age, birthDate) 
+VALUES ($name, $age, $birthDate)''',
+        bindings: content,
+      );
       expect(
         txn.buffer.toString(),
-        contains(r'INSERT INTO table (name, age) VALUES ($name, $age)'),
+        contains('"John", 25, ${Surreal.dateTimeTag}"$dateTime"'),
+      );
+
+      txn.buffer.clear();
+      txn.query(
+        r'INSERT INTO table $content',
+        bindings: {'content': content},
+      );
+      final expectedJsonString =
+          '''{"name":"John","age":25,"birthDate":${Surreal.dateTimeTag}"$dateTime"}''';
+      expect(
+        txn.buffer.toString(),
+        contains(expectedJsonString),
       );
     });
   });
