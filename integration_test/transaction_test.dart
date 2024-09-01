@@ -41,7 +41,7 @@ void main() {
       await db.delete('test'); // clean up
     });
 
-    testWidgets('Transaction executes query with date field',
+    testWidgets('Transaction executes query with date time field',
         (WidgetTester tester) async {
       final dateTime = DateTime.now().toUtc();
       final dateTimeString = dateTime.toIso8601String();
@@ -51,18 +51,21 @@ void main() {
         'birthDate': JSDate(dateTimeString.toJS),
       };
 
-      await db.transaction((txn) async {
-        txn.query(
-          r'''
+      await db.transaction(
+        showSql: true,
+        (txn) async {
+          txn.query(
+            r'''
 INSERT INTO table1 (name, age, birthDate) 
 VALUES ($name, $age, $birthDate);''',
-          bindings: content,
-        );
-        txn.query(
-          r'INSERT INTO table2 $content;',
-          bindings: {'content': content},
-        );
-      });
+            bindings: content,
+          );
+          txn.query(
+            r'INSERT INTO table2 $content;',
+            bindings: {'content': content},
+          );
+        },
+      );
 
       var result = await db.query('SELECT * FROM table1;');
       expect(result, isNotEmpty);

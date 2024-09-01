@@ -385,6 +385,21 @@ class Surreal {
     );
   }
 
+  /// Function similar to the [query], but return detail errors on execution of
+  /// set of SurrealQL statements.
+  // ignore: non_constant_identifier_names
+  Future<Object?> query_raw(
+    String sql, {
+    Map<String, dynamic> bindings = const {},
+  }) async {
+    return _wrap(
+      _surreal.query_raw(
+        sql,
+        bindings.jsify(),
+      ),
+    );
+  }
+
   /// Deletes a specific resource(record) or all resources(records).
   ///
   /// The [resource] is the name of the resource to delete.
@@ -570,7 +585,7 @@ class Transaction {
       if (showSql) {
         _logger.i(sql);
       }
-      return _db.query(sql);
+      return _db.query_raw(sql);
     } else {
       return 'Transaction has been canceled by user.';
     }

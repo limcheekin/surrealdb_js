@@ -17,6 +17,8 @@ extension type SurrealJS._(JSObject _) implements JSObject {
   external JSPromise authenticate(String token);
   external JSPromise<JSAny?> info();
   external JSPromise<JSAny?> query(String sql, [JSAny? bindings]);
+  // ignore: non_constant_identifier_names
+  external JSPromise<JSAny?> query_raw(String sql, [JSAny? bindings]);
   external JSPromise<JSAny?> select(JSAny resource);
   external JSPromise<JSAny?> create(JSAny resource, JSAny? data);
   external JSPromise<JSAny?> update(JSAny resource, JSAny? data);
