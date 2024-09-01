@@ -5,8 +5,6 @@ import 'dart:js_interop';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:surrealdb_js/src/js_date.dart';
-import 'package:surrealdb_js/src/surrealdb_js.dart';
 import 'package:surrealdb_js/surrealdb_js.dart';
 
 void main() {
