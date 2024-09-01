@@ -11,6 +11,12 @@ Changes to the project are tracked using build numbers behind the version number
 
 ## [Unreleased]
 
+## [1.0.0-beta.20+5] - 2024-09-01
+
+- Feat: Add `query_raw` method.
+- Feat: Add `showSql` flag to the `transaction` method.
+- Fix: `DateTime` field error in the `query` method with `bindings` by introduce `JSDate` and `JSDateJsonConverter` class.
+
 ## [1.0.0-beta.20+4] - 2024-08-17
 
 - Upgraded surrealdb.js to 1.0.0-beta.20.

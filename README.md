@@ -52,6 +52,7 @@ Lastly, add the following code before the `</head>` tag in the `web/index.html` 
 - <input type="checkbox" checked disabled /> [x] `delete()`
 - <input type="checkbox" checked disabled /> [x] `select()`
 - <input type="checkbox" checked disabled /> [x] `query()`
+- <input type="checkbox" checked disabled /> [x] `query_raw()`
 - <input type="checkbox" checked disabled /> [x] `transaction()`
 - <input type="checkbox" checked disabled /> [x] `let()`
 - <input type="checkbox" checked disabled /> [x] `unset()`
@@ -105,7 +106,9 @@ For more code examples, kindly refer to the [integration test](https://github.co
 ### Transaction Support
 
 ```dart
-final result = await db.transaction((txn) async {
+final result = await db.transaction(
+  showSql: true,
+  (txn) async {
     txn.query('DEFINE TABLE test SCHEMAFULL;');
     txn.query('DEFINE FIELD id ON test TYPE record;');
     txn.query('DEFINE FIELD name ON test TYPE string;');
@@ -116,7 +119,8 @@ final result = await db.transaction((txn) async {
     if (somethingWrong) {
       txn.cancel();
     }
-});
+  },
+);
 ```
 
 For more code examples, kindly refer to the [integration test of transaction](https://github.com/limcheekin/surrealdb_js/blob/main/integration_test/transaction_test.dart).

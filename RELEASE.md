@@ -1,1 +1,3 @@
-- Upgraded surrealdb.js to 1.0.0-beta.20.
+- Feat: Add `query_raw` method.
+- Feat: Add `showSql` flag to the `transaction` method.
+- Fix: `DateTime` field error in the `query` method with `bindings` by introduce `JSDate` and `JSDateJsonConverter` class.
