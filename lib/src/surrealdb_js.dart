@@ -481,6 +481,9 @@ Please see https://github.com/surrealdb/surrealdb.wasm/issues/56.''');
   /// time of the transaction. If the transaction takes longer than the
   /// specified duration, a timeout exception is throw.
   ///
+  /// Set the [showSql] parameter to `true` to show SurrealQL statements
+  /// executed within the transaction.
+  ///
   /// Example usage:
   /// ```dart
   /// await db.transaction(
@@ -491,6 +494,7 @@ Please see https://github.com/surrealdb/surrealdb.wasm/issues/56.''');
   ///                    bindings: { amount: 300.00 });
   ///   },
   ///   timeout: const Duration(seconds: 60), // Custom timeout of 60 seconds
+  ///   showSql: true,
   /// );
   /// ```
   ///
