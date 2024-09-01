@@ -52,7 +52,7 @@ class JSDateJsonConverter implements JsonConverter<DateTime, JSDate> {
   /// The [jsDate] parameter is expected to be an instance of `JSDate` (a
   /// JavaScript `Date` object). This method extracts the time value (in
   /// milliseconds since the Unix epoch) from the JavaScript `Date` object and
-  /// converts it to a Dart `DateTime`.
+  /// converts it to a Dart `DateTime` in UTC.
   ///
   /// Returns:
   /// A `DateTime` object representing the same point in time as the input

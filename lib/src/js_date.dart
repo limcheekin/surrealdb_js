@@ -12,7 +12,7 @@ import 'dart:js_interop';
 /// Example usage:
 /// ```dart
 /// // Create a new JSDate from a string representation of a date.
-/// var jsDate = JSDate('2024-09-01');
+/// var jsDate = JSDate('2024-09-01T00:00:00.000Z'.toJS);
 ///
 /// // Get the time in milliseconds since the Unix epoch.
 /// var timeInMillis = jsDate.getTime();
@@ -35,7 +35,7 @@ extension type JSDate._(JSObject _) implements JSObject {
   ///
   /// Example:
   /// ```dart
-  /// var jsDate = JSDate('2024-09-01');
+  /// var jsDate = JSDate('2024-09-01T00:00:00.000Z'.toJS);
   /// int timeInMillis = jsDate.getTime();
   /// ```
   external int getTime();
