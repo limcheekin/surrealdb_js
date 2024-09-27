@@ -11,7 +11,7 @@ Changes to the project are tracked using build numbers behind the version number
 
 ## [Unreleased]
 
-## [1.0.1+5] - 2024-09-27
+## [1.0.1+7] - 2024-09-27
 
 - Feat: Upgrade surrealdb.js to 1.0.1, ensuring compatibility with surrealdb 2.0.2.
 
