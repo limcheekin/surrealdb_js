@@ -23,9 +23,9 @@ class Surreal {
   /// A tag to indicate date time field
   static const dateTimeTag = '<datetime>';
   late SurrealJS _surreal;
-  final _logger = Logger(
-    printer: PrettyPrinter(),
-  );
+  // final _logger = Logger(
+  //  printer: PrettyPrinter(),
+  // );
 
   /// Assigns a value as a parameter for this connection.
   ///
