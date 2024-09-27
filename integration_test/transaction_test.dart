@@ -20,9 +20,8 @@ void main() {
   group('db.transaction()', () {
     testWidgets('Transaction executes successfully',
         (WidgetTester tester) async {
-      await db.transaction((txn) async {
+      await db.transaction(showSql: true, (txn) async {
         txn.query('DEFINE TABLE test SCHEMAFULL;');
-        txn.query('DEFINE FIELD id ON test TYPE record;');
         txn.query('DEFINE FIELD name ON test TYPE string;');
         txn.query(
           r'CREATE test SET name = $name;',
