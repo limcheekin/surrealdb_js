@@ -38,40 +38,46 @@ void main() {
   testWidgets('Create a record with datetime field and change it',
       (WidgetTester tester) async {
     const sql = '''
+REMOVE TABLE IF EXISTS document;
 DEFINE TABLE document SCHEMALESS;
 DEFINE FIELD content ON document TYPE option<string>;
 DEFINE FIELD created ON document TYPE datetime;
 ''';
     await db.query(sql);
-    const created = '2023-10-31T03:19:16.601Z';
+    final created = DateTime.parse('2023-10-31T03:19:16.601Z');
+    const converter = JSDateJsonConverter();
     final data = {
       'content': 'doc 1',
-      'created': created,
+      'created': converter.toJson(created),
     };
-    final result =
-        await db.query('CREATE ONLY document CONTENT ${jsonEncode(data)}');
+    final result = await db.query(
+      r'CREATE ONLY document CONTENT $data',
+      bindings: {'data': data},
+    );
     final doc = Map<String, dynamic>.from(
       result! as Map,
     );
     expect(doc['id'], isNotNull);
-    expect(doc['created'], equals(DateTime.parse(created)));
+    expect(doc['created'], equals(created));
 
-    const mergedDate = '2023-11-01T03:19:16.601Z';
+    final mergedDate = DateTime.parse('2023-11-01T03:19:16.601Z');
     final mergeData = {
-      'created': mergedDate,
+      'created': converter.toJson(mergedDate),
     };
     final merged = await db.query(
-      'UPDATE ONLY ${doc['id']} MERGE ${jsonEncode(mergeData)}',
+      'UPDATE ONLY ${doc['id']} MERGE \$data',
+      bindings: {'data': mergeData},
     );
     final mergedDoc = Map<String, dynamic>.from(
       merged! as Map,
     );
-    expect(mergedDoc['created'], equals(DateTime.parse(mergedDate)));
+    expect(mergedDoc['created'], equals(mergedDate));
   });
 
   testWidgets('Create a record with bindings param',
       (WidgetTester tester) async {
     const sql = '''
+REMOVE TABLE IF EXISTS bindings;
 DEFINE TABLE bindings SCHEMALESS;
 DEFINE FIELD file ON bindings TYPE string;
 ''';
@@ -101,6 +107,7 @@ DEFINE FIELD file ON bindings TYPE string;
   testWidgets('Create a record with bytes type field and change it',
       (WidgetTester tester) async {
     const sql = '''
+REMOVE TABLE IF EXISTS documents;
 DEFINE TABLE documents SCHEMALESS;
 DEFINE FIELD file ON documents TYPE bytes;
 ''';
