@@ -1,6 +1,6 @@
 name: surrealdb_js
 description: Flutter SurrealDB SDK for JavaScript
-version: 1.0.0-beta.20
+version: 1.0.1
 repository: https://github.com/limcheekin/surrealdb_js
 
 environment:

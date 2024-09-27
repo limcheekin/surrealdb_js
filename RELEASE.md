@@ -1,3 +1,1 @@
-- Feat: Add `query_raw` method.
-- Feat: Add `showSql` flag to the `transaction` method.
-- Fix: `DateTime` field error in the `query` method with `bindings` by introduce `JSDate` and `JSDateJsonConverter` class.
+- Feat: Upgrade surrealdb.js to 1.0.1, ensuring compatibility with surrealdb 2.0.2.

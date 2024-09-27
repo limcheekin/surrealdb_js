@@ -461,10 +461,10 @@ Please see https://github.com/surrealdb/surrealdb.wasm/issues/56.''');
     if (jsResult.isA<JSArray>()) {
       final list = jsResult.dartify()! as List;
       wrapResult = list.isEmpty ? null : (list.length == 1 ? list.first : list);
-      _logger.t('wrapResult if $wrapResult');
+      //_logger.t('wrapResult if $wrapResult');
     } else {
       wrapResult = jsResult.dartify();
-      _logger.t('wrapResult else $wrapResult');
+      //_logger.t('wrapResult else $wrapResult');
     }
     return wrapResult;
   }

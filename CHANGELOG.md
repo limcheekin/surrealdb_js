@@ -11,6 +11,10 @@ Changes to the project are tracked using build numbers behind the version number
 
 ## [Unreleased]
 
+## [1.0.1+5] - 2024-09-27
+
+- Feat: Upgrade surrealdb.js to 1.0.1, ensuring compatibility with surrealdb 2.0.2.
+
 ## [1.0.0-beta.20+5] - 2024-09-01
 
 - Feat: Add `query_raw` method.
