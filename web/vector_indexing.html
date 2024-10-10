@@ -22,7 +22,7 @@
 
                 await db.use({
                     namespace: "bug",
-                    database: "bug1"
+                    database: "bug"
                 });
 
                 await db.signin({
@@ -33,7 +33,7 @@
                 await db.query("\
 REMOVE TABLE IF EXISTS embeddings; \
 DEFINE TABLE embeddings SCHEMALESS; \
-DEFINE FIELD id ON embeddings TYPE record; \
+DEFINE FIELD id ON embeddings VALUE <record>($value) ASSERT $value != NONE; \
 DEFINE FIELD content ON embeddings TYPE string; \
 DEFINE FIELD embedding ON embeddings TYPE array<float>; \
 DEFINE FIELD metadata ON embeddings TYPE option<object>; \
