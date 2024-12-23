@@ -1,1 +1,1 @@
-- Feat: Upgrade surrealdb.js to 1.0.1, ensuring compatibility with surrealdb 2.0.2.
+- Feat: Upgrade surrealdb.js to 1.1.0, ensuring compatibility with surrealdb 2.1.4.
